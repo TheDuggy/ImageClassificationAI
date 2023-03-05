@@ -14,55 +14,11 @@
    <string>Image-Recognition</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#MainWindow {
-	background-color: white;
-}</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">QLabel {
-	font-family: JUST Sans;
-	font-size: 24px;
-}
-
-QLabel#prediction {
-	color: rgb(255, 170, 0);
-	font-weight: bold;
-}
-
-QLabel#accuracy {
-	color: rgb(255, 0, 4);
-	font-weight: bold;
-}
-
-QPushButton{
-	font-family: JUST Sans;
-	font-size: 20px;
-}
-
-QLineEdit {
-	font-family: JUST Sans;
-	font-size: 20px;	
-	border-style: solid;
-	border-width: 1px;
-	border-radius: 10px 10px 10px 10px;
-	color: rgb(0, 203, 0)
-}
-
-QFrame {
-	background-color: white;
-	border: 0px;
-}
-
-QLineEdit {
-	font-family: JUST Sans;
-	font-size: 20px;
-}
-
-QScrollArea QWidget{
-	background-color: white;
-}
-</string>
+    <string notr="true"/>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
@@ -224,16 +180,28 @@ QScrollArea QWidget{
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustIgnored</enum>
+        </property>
         <property name="widgetResizable">
          <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <widget class="QWidget" name="list">
          <property name="geometry">
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>361</width>
-           <height>351</height>
+           <width>359</width>
+           <height>349</height>
           </rect>
          </property>
         </widget>

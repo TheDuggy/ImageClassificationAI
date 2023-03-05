@@ -1,0 +1,79 @@
+QLabel {
+	font-family: JUST Sans;
+	font-size: 24px;
+}
+
+QLabel#prediction {
+	color: rgb(255, 170, 0);
+	font-weight: bold;
+}
+
+QLabel#accuracy {
+	color: rgb(255, 0, 4);
+	font-weight: bold;
+}
+
+QPushButton {
+	font-family: JUST Sans;
+	font-size: 20px;
+}
+
+QLineEdit {
+	font-family: JUST Sans;
+	font-size: 20px;	
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 10px 10px 10px 10px;
+	color: rgb(0, 203, 0)
+}
+
+QFrame {
+	background-color: white;
+	border: 0px;
+}
+
+QLineEdit {
+	font-family: JUST Sans;
+	font-size: 20px;
+}
+
+QMainWindow{
+	background-color: white;
+}
+
+QScrollArea > QWidget > QWidget > QWidget{
+	background-color: white;
+}
+
+
+QWidget #list{
+	background-color: white ;
+}
+
+QScrollArea > QWidget > QWidget > QWidget > #list_accuracy{
+	color: rgb(255, 0, 4);
+}
+
+QScrollArea > QWidget > QWidget > QWidget > #list_prediction{
+	color: rgb(255, 170, 0);
+}
+
+QScrollBar:vertical {
+	background: transparent;
+	width: 15px;
+	margin: 22px 0 22px 0;
+}
+
+QScrollBar::handle:vertical {
+	background: white;
+	border-style: solid;
+	border-radius: 5px;
+	border-width: 2px;
+	border-color: black;
+	height: 50%;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+	color: none;
+	border: none;
+	height: 0px;
+}

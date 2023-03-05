@@ -15,13 +15,11 @@ Copyright 2023 Georg Kollegger
 """
 from PyQt5.QtCore import QFile, QTextStream
 from PyQt5 import uic
-from PyQt5 import Qt
 from numpy import array
 from PIL import Image
-from math import sqrt
-from PyQt5.QtGui import QImage, QPixmap, QResizeEvent
+from PyQt5.QtGui import QImage, QPixmap, QResizeEvent, QFontDatabase
 
-from PyQt5.QtWidgets import QApplication, QStyleFactory, QMainWindow, QVBoxLayout, QLabel, QScrollArea, QLineEdit, QDialog, QWidget, QFrame
+from PyQt5.QtWidgets import QApplication, QStyleFactory, QMainWindow, QVBoxLayout, QLabel, QScrollArea, QLineEdit, QDialog, QWidget
 from tensorflow import keras
 from tensorflow import expand_dims
 from tensorflow import nn
@@ -42,6 +40,8 @@ class App(QMainWindow):
         self.load_img.clicked.connect(self.load)
         
         self.predict.clicked.connect(self.predict_img)
+        with open('./ui/style/default_white.qss', 'r') as qss:
+            self.setStyleSheet(qss.read())
         print("-- app started succesfully ---")
         print('classes: ' + str(self.ai['classes']))
         print('model-summary: ')
@@ -141,6 +141,8 @@ class App(QMainWindow):
 if __name__ == '__main__':
     app = QApplication([])
     dialog = App()
+    QFontDatabase.addApplicationFont('./ui/style/font/JUST Sans/JUST Sans Regular.otf')
+    QFontDatabase.addApplicationFont('./ui/style/font/JUST Sans/JUST Sans ExBold.otf')
     app.setStyle(QStyleFactory.create('Fusion'))
     dialog.show()
     app.exec()
