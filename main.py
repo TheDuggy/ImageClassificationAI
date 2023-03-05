@@ -13,6 +13,8 @@ Copyright 2023 Georg Kollegger
    See the License for the specific language governing permissions and
    limitations under the License.
 """
+from sys import argv
+from os import path
 from PyQt5.QtCore import QFile, QTextStream
 from PyQt5 import uic
 from numpy import array
@@ -30,6 +32,7 @@ import json
 class App(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.resolve_arguments()
         uic.loadUi("./ui/Main.ui", self)
         self.img_load = False
         self.ai = {'model':  keras.models.load_model('./ai/img_classification_ai_final.h5')}
@@ -40,11 +43,11 @@ class App(QMainWindow):
         self.load_img.clicked.connect(self.load)
         
         self.predict.clicked.connect(self.predict_img)
-        with open('./ui/style/default_white.qss', 'r') as qss:
+        with open(self.stylesheet_path, 'r') as qss:
             self.setStyleSheet(qss.read())
-        print("-- app started succesfully ---")
-        print('classes: ' + str(self.ai['classes']))
-        print('model-summary: ')
+        self.log('INFO', 'App started successfully!')
+        self.log('INFO', 'classes: ' + str(self.ai['classes']))
+        self.log('INFO', ' ' * 10 + '### MODEL SUMMARY FOLLOWING BELOW ###')
         self.ai['model'].summary()
     
     def load(self):
@@ -59,6 +62,37 @@ class App(QMainWindow):
             uic.loadUi('./ui/Warning.ui', warning)
             warning.ok.clicked.connect(warning.close)
             warning.exec()
+
+    def resolve_arguments(self):
+        self.stylesheet_path = './ui/style/default_light.qss'
+        if len(argv) == 2:
+            style = argv[1].split('=')
+            if len(style) == 2:
+                if style[0] == '--stylesheet':
+                    if path.exists(style[1]) and path.isfile(style[1]):
+                        self.stylesheet_path = style[0]
+                    else:
+                        self.log('WARNING', 'File ' + style[1] + ' not found! Using default ' + self.stylesheet_path) 
+                else:
+                    self.log('WARNING', 'Invalid argument ' + style + '! Ignoring it...')
+            else:
+                self.log('WARNING', 'Invalid argument ' + style + '! Ignoring it...')
+
+        self.log('INFO', 'Stylesheet set to ' + self.stylesheet_path)
+
+    def log(self, level: str, msg: str):
+        match level:
+            case 'INFO':
+                print('[+] ', end='')
+
+            case 'ERROR':
+                print('[!] ', end='')
+    
+            case 'WARNING':
+                print('[::] ', end='')
+        
+        print(msg)
+
 
     def list_all_classes(self,  sorted_classes: dict):
         scroll_view_widget = self.hidden_frame.findChild(QScrollArea, 'prediction_list').findChild(QWidget, 'list')
