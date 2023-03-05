@@ -15,25 +15,26 @@ Copyright 2023 Georg Kollegger
 """
 from time import time
 from sys import argv
-from colorama import Fore, Back, init
+from colorama import Fore, Back
+from colorama import init as init_colorama
 from os import path
-from PyQt5 import uic
 from numpy import array
 from PIL import Image
+from PyQt5 import uic
 from PyQt5.QtGui import QImage, QPixmap, QResizeEvent, QFontDatabase
-
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QStyleFactory, QMainWindow, QVBoxLayout, QLabel, QScrollArea, QLineEdit, QDialog, QWidget
 from tensorflow import keras
 from tensorflow import expand_dims
 from tensorflow import nn
-from threading import Thread
 import numpy as np
 import json
 
 class App(QMainWindow):
+    
     def __init__(self):
-        init()
-        super().__init__()
+        QMainWindow.__init__(self)
+        init_colorama()
         self.resolve_arguments()
         uic.loadUi("./ui/Main.ui", self)
         self.img_load = False

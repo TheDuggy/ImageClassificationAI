@@ -65,10 +65,10 @@ python main.py
 ```
 <br> 
 
-### Stylesheet 🎨
+### Stylesheets 🎨
 <br> 
 
-If you want you can also add custom stylesheets to the applicatioin. Just add the argument `--stylesheet=<PATH_TO_YOUR_STYLESHEET>`!  
+There is also a gruvbox based darktheme, which is located at `./ui/style/default_dark.qss`. If you want you can also add your own stylesheets to the applicatioin. Just add the argument `--stylesheet=<PATH_TO_YOUR_STYLESHEET>`!  
 E.g.: 
 ```
 python main.py --stylsheet=/path/to/my/awsome/stylesheet.qss
