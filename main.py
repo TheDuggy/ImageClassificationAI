@@ -13,9 +13,10 @@ Copyright 2023 Georg Kollegger
    See the License for the specific language governing permissions and
    limitations under the License.
 """
+from time import time
 from sys import argv
+from colorama import Fore, Back, init
 from os import path
-from PyQt5.QtCore import QFile, QTextStream
 from PyQt5 import uic
 from numpy import array
 from PIL import Image
@@ -31,6 +32,7 @@ import json
 
 class App(QMainWindow):
     def __init__(self):
+        init()
         super().__init__()
         self.resolve_arguments()
         uic.loadUi("./ui/Main.ui", self)
@@ -46,9 +48,12 @@ class App(QMainWindow):
         with open(self.stylesheet_path, 'r') as qss:
             self.setStyleSheet(qss.read())
         self.log('INFO', 'App started successfully!')
-        self.log('INFO', 'classes: ' + str(self.ai['classes']))
-        self.log('INFO', ' ' * 10 + '### MODEL SUMMARY FOLLOWING BELOW ###')
-        self.ai['model'].summary()
+        self.log('INFO', 'classes: ' + Back.LIGHTRED_EX + Fore.WHITE + str(self.ai['classes']) + Back.RESET)
+        self.log('INFO', ' ' * 17 + '### MODEL SUMMARY BEGINNING ###')
+        summary = []
+        self.ai['model'].summary(print_fn=lambda s: summary.append(s))
+        print(Fore.LIGHTBLUE_EX + '\n'.join(summary))
+        self.log('INFO', ' ' * 20 + '### MODEL SUMMARY END ###')
     
     def load(self):
         self.hidden_frame.setVisible(False)
@@ -70,7 +75,7 @@ class App(QMainWindow):
             if len(style) == 2:
                 if style[0] == '--stylesheet':
                     if path.exists(style[1]) and path.isfile(style[1]):
-                        self.stylesheet_path = style[0]
+                        self.stylesheet_path = style[1]
                     else:
                         self.log('WARNING', 'File ' + style[1] + ' not found! Using default ' + self.stylesheet_path) 
                 else:
@@ -78,20 +83,21 @@ class App(QMainWindow):
             else:
                 self.log('WARNING', 'Invalid argument ' + style + '! Ignoring it...')
 
-        self.log('INFO', 'Stylesheet set to ' + self.stylesheet_path)
+        self.log('INFO', 'Stylesheet: ' + Back.LIGHTRED_EX + Fore.WHITE + path.realpath(self.stylesheet_path) + Back.RESET)
 
-    def log(self, level: str, msg: str):
+    def log(self, level: str, msg: str, reset=True):
         match level:
             case 'INFO':
-                print('[+] ', end='')
+                print(f'{Fore.LIGHTGREEN_EX}[+] ', end='')
 
             case 'ERROR':
-                print('[!] ', end='')
+                print(f'{Fore.LIGHTRED_EX}[!] ', end='')
     
             case 'WARNING':
-                print('[::] ', end='')
+                print(f'{Fore.LIGHTYELLOW_EX}[::] ', end='')
         
-        print(msg)
+        if reset:
+            print(msg + Fore.RESET)
 
 
     def list_all_classes(self,  sorted_classes: dict):
@@ -115,8 +121,10 @@ class App(QMainWindow):
     def predict_img(self):
         test_img_array = keras.utils.img_to_array(keras.utils.load_img(self.input_img_path, target_size=(224, 224)))
         test_img_array = expand_dims(test_img_array, 0)
-
-        predictions = self.ai['model'].predict(test_img_array)
+        begin_time = time()
+        predictions = self.ai['model'].predict(test_img_array, verbose=0)
+        time_taken = time() - begin_time
+        self.log('INFO', 'Prediction {:.3f}s'.format(time_taken))
         score = nn.softmax(predictions[0])
         self.hidden_frame.findChild(QLabel, 'prediction').setText(str(self.ai['classes'][np.argmax(score, axis=-1)]).capitalize())
         self.hidden_frame.findChild(QLabel, 'accuracy').setText("{:.2f}%".format( 100 * np.max(score)))
@@ -179,4 +187,4 @@ if __name__ == '__main__':
     QFontDatabase.addApplicationFont('./ui/style/font/JUST Sans/JUST Sans ExBold.otf')
     app.setStyle(QStyleFactory.create('Fusion'))
     dialog.show()
-    app.exec()
+    exit(app.exec())
