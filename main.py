@@ -87,16 +87,15 @@ class App(QMainWindow):
         self.log('INFO', 'Stylesheet: ' + Back.LIGHTRED_EX + Fore.WHITE + path.realpath(self.stylesheet_path) + Back.RESET)
 
     def log(self, level: str, msg: str, reset=True):
-        match level:
-            case 'INFO':
-                print(f'{Fore.LIGHTGREEN_EX}[+] ', end='')
+        if level == 'INFO': 
+            print(f'{Fore.LIGHTGREEN_EX}[+] ', end='')
+        elif level == 'ERROR':
+            print(f'{Fore.LIGHTRED_EX}[!] ', end='')
+        elif level == 'WARNING':
+            print(f'{Fore.LIGHTYELLOW_EX}[::] ', end='')
+        else:
+            return
 
-            case 'ERROR':
-                print(f'{Fore.LIGHTRED_EX}[!] ', end='')
-    
-            case 'WARNING':
-                print(f'{Fore.LIGHTYELLOW_EX}[::] ', end='')
-        
         if reset:
             print(msg + Fore.RESET)
 
