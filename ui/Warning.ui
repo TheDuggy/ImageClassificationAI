@@ -40,7 +40,7 @@
 font-size: 20px;</string>
    </property>
    <property name="text">
-    <string>Failed to opne Image</string>
+    <string>Failed to open Image</string>
    </property>
   </widget>
  </widget>

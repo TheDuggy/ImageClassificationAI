@@ -66,6 +66,10 @@ QMainWindow{
 	background-color: rgb(40, 40, 40);
 }
 
+QDialog {
+	background-color: rgb(40, 40, 40);
+}
+
 QScrollArea > QWidget > QWidget > QWidget{
 	background-color: rgb(40, 40, 40);
 }

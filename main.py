@@ -47,7 +47,9 @@ class App(QMainWindow):
         
         self.predict.clicked.connect(self.predict_img)
         with open(self.stylesheet_path, 'r') as qss:
-            self.setStyleSheet(qss.read())
+            self.stylesheet_content = qss.read()
+
+        self.setStyleSheet(self.stylesheet_content)
         self.log('INFO', 'App started successfully!')
         self.log('INFO', 'classes: ' + Back.LIGHTRED_EX + Fore.WHITE + str(self.ai['classes']) + Back.RESET)
         self.log('INFO', ' ' * 17 + '### MODEL SUMMARY BEGINNING ###')
@@ -66,6 +68,7 @@ class App(QMainWindow):
             print(e)
             warning = QDialog()
             uic.loadUi('./ui/Warning.ui', warning)
+            warning.setStyleSheet(self.stylesheet_content)
             warning.ok.clicked.connect(warning.close)
             warning.exec()
 
