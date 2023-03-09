@@ -23,7 +23,7 @@ from PIL import Image
 from PyQt5 import uic
 from PyQt5.QtGui import QImage, QPixmap, QResizeEvent, QFontDatabase
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QStyleFactory, QMainWindow, QVBoxLayout, QLabel, QScrollArea, QLineEdit, QDialog, QWidget
+from PyQt5.QtWidgets import QApplication, QStyleFactory, QMainWindow, QVBoxLayout, QLabel, QScrollArea, QLineEdit, QDialog, QWidget, QFileDialog, QFrame
 from tensorflow import keras
 from tensorflow import expand_dims
 from tensorflow import nn
@@ -59,15 +59,25 @@ class App(QMainWindow):
         self.log('INFO', ' ' * 20 + '### MODEL SUMMARY END ###')
     
     def load(self):
-        self.hidden_frame.setVisible(False)
         try:
-            self.input_img_path = self.left_frame.findChild(QLineEdit, 'img_path').text()
+            input_img_path = QFileDialog.getOpenFileName(self, filter='Image (*);; PNG (*.png);; JPG (*.jpg);; JPEG (*.jpeg);;')[0]
+            if input_img_path == '':
+                return
+
+            self.input_img_clean = Image.open(input_img_path)
+            self.input_img_predict = keras.utils.img_to_array(keras.utils.load_img(input_img_path, target_size=(224, 224)))
+
+            self.findChild(QLabel, 'img_type').setText(self.input_img_clean.format if self.input_img_clean.format != '' else 'None')
+            self.findChild(QLabel, 'img_path').setText(input_img_path)
+
+            self.hidden_frame.setVisible(False)
             self.img_load = True
             self.render_image()
         except Exception as e:
-            print(e)
+            self.log('ERROR', str(e))
             warning = QDialog()
             uic.loadUi('./ui/Warning.ui', warning)
+            warning.setWindowTitle('Failed to open image!')
             warning.setStyleSheet(self.stylesheet_content)
             warning.ok.clicked.connect(warning.close)
             warning.exec()
@@ -122,7 +132,7 @@ class App(QMainWindow):
             scroll_view_widget.setLayout(list)
 
     def predict_img(self):
-        test_img_array = keras.utils.img_to_array(keras.utils.load_img(self.input_img_path, target_size=(224, 224)))
+        test_img_array = self.input_img_predict
         test_img_array = expand_dims(test_img_array, 0)
         begin_time = time()
         predictions = self.ai['model'].predict(test_img_array, verbose=0)
@@ -151,14 +161,13 @@ class App(QMainWindow):
         return t
 
     def render_image(self):
-        self.input_img = Image.open(self.input_img_path)
-        self.input_img = self.input_img.convert('RGB')
+        input_img = self.input_img_clean.convert('RGB')
 
         max_w = self.right_frame.findChild(QLabel, 'img').geometry().width()
         max_h = self.right_frame.findChild(QLabel, 'img').geometry().height()
 
-        curr_w = self.input_img.width
-        curr_h = self.input_img.height
+        curr_w = input_img.width
+        curr_h = input_img.height
         ratio = curr_w / curr_h
 
         new_w = 0
@@ -178,9 +187,9 @@ class App(QMainWindow):
                 new_h = max_w
                 new_w = max_w
 
-        self.input_img = self.input_img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+        input_img = input_img.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
-        img = QImage(array(self.input_img), self.input_img.width, self.input_img.height, 3 * self.input_img.width, QImage.Format.Format_RGB888)
+        img = QImage(array(input_img), input_img.width, input_img.height, 3 * input_img.width, QImage.Format.Format_RGB888)
         self.right_frame.findChild(QLabel, 'img').setPixmap(QPixmap.fromImage(img))
 
 if __name__ == '__main__':

@@ -17,15 +17,15 @@ Copyright 2023 Georg Kollegger
 QLabel {
 	font-family: JUST Sans;
 	font-size: 24px;
-	color: rgb(235, 219, 178);;
+	color: rgb(235, 219, 178);
 }
 
-QLabel#prediction {
+#prediction {
 	color: rgb(215, 153, 33);
 	font-weight: bold;
 }
 
-QLabel#accuracy {
+#accuracy {
 	color: rgb(204, 36, 29);
 	font-weight: bold;
 }
@@ -46,14 +46,12 @@ QPushButton:hover {
 	color: rgb(235, 219, 178);
 }
 
-QLineEdit {
-	font-family: JUST Sans;
-	font-size: 20px;	
-	background-color: rgb(40, 40, 40);
-	border-style: solid;
-	border-color: rgb(102, 92, 84);
-	border-width: 2px;
-	border-radius: 10px 10px 10px 10px;
+#img_type {
+	font-weight: bold;
+	color: rgb(69, 133, 136);
+}
+
+#img_path {
 	color: rgb(184, 187, 38);
 }
 
@@ -75,34 +73,55 @@ QScrollArea > QWidget > QWidget > QWidget{
 }
 
 
-QWidget #list{
+#list, #img_path_list{
 	background-color: rgb(40, 40, 40) ;
 }
 
-QScrollArea > QWidget > QWidget > QWidget > #list_accuracy{
+#list_accuracy{
 	color: rgb(204, 36, 29);
 }
 
-QScrollArea > QWidget > QWidget > QWidget > #list_prediction{
+#list_prediction{
 	color: rgb(215, 153, 33);
 }
 
 QScrollBar:vertical {
 	background: transparent;
 	width: 15px;
-	margin: 22px 0 22px 0;
+	margin: 0;
+}
+
+QScrollBar:horizontal{
+	background: transparent;
+	height: 15px;
+	margin: 0;
 }
 
 QScrollBar::handle:vertical {
-	background: rgb(40, 40, 40);
+	background: transparent;
 	border-style: solid;
 	border-radius: 5px;
 	border-width: 2px;
 	border-color: rgb(102, 92, 84);
 	height: 50%;
 }
+
+QScrollBar::handle:horizontal {
+	background: transparent;
+	border-style: solid;
+	border-radius: 5px;
+	border-width: 2px;
+	border-color: rgb(102, 92, 84);
+}
+
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
 	color: none;
 	border: none;
 	height: 0px;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+	color: none;
+	border: none;
+	width: 0px;
 }
